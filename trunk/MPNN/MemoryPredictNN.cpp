@@ -106,3 +106,45 @@ bool MemoryPredictNN::CloseMINSTTestImage()
 
 	return false;
 }
+
+bool MemoryPredictNN::CreateInputLayer()
+{
+	NeuronsLayer layer;
+	layer._height = (int)floor(_input_layer_height*sqrt(_layer_shrink_ratio));
+	layer._width = (int)floor(_input_layer_width*sqrt(_layer_shrink_ratio));
+	if(layer._height * layer._width <= 0)
+	{
+		return false;
+	}
+	else
+	{
+		_neurons_layers.push_back(layer);
+		return true;
+	}
+}
+
+bool MemoryPredictNN::CreateLayer()
+{
+	NeuronsLayer lower_layer = _neurons_layers.back();
+	NeuronsLayer layer;
+	layer._height = (int)floor(lower_layer._height*sqrt(_layer_shrink_ratio));
+	layer._width = (int)floor(lower_layer._width*sqrt(_layer_shrink_ratio));
+	if(layer._height * layer._width <= 0)
+	{
+		return false;
+	}
+	else
+	{
+		_neurons_layers.push_back(layer);
+		return true;
+	}
+}
+
+bool MemoryPredictNN::TrainInputLayer()
+{
+
+}
+bool MemoryPredictNN::TrainLayer(int layer)
+{
+
+}
