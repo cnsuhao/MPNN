@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
 	int _width;
-	int _length;
+	int _height;
 	vector<float> _layer_output_vector;//record the last output
 } NeuronsLayer;
 
@@ -32,6 +32,8 @@ private:
 	//parameters
 	int _input_layer_neuron_central_field;//unit:the pixel; positive field
 	int _input_layer_neuron_surround_field;//unit:the number of neuron; negative field, which define the diameter of prediction in the input layer
+	int _input_layer_width;//the number of neurons
+	int _input_layer_height;//the number of neurons
 
 	float _layer_shrink_ratio;//(0,1]. the number of neurons in the i-th layer is n_i = n_{i-1}* _layer_shrink_ratio
 	int _receptive_field;//the number of links from the i-1 layer accepted by the neuron in the i layer (except for the input layer)
@@ -70,6 +72,9 @@ public:
 	//mpnn
 	bool CreateInputLayer();
 	bool CreateLayer();
+	bool TrainInputLayer();
+	bool TrainLayer(int layer);
+
 	float active_sigmoid(int layer, int nid);
 
 	//minst
