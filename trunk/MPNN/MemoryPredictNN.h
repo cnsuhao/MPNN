@@ -5,13 +5,13 @@
 
 using namespace std;
 
-typedef struct {
+typedef struct _WeightMatrix {
 	int _rows;
 	int _cols;
 	vector<float> _weights;
 } WeightMatrix;
 
-typedef struct {
+typedef struct _NeuronsLayer {
 	int _width;
 	int _height;
 	vector<float> _layer_output_vector;//record the last output
@@ -21,11 +21,14 @@ typedef struct {
 class MemoryPredictNN
 {
 private:
+	//////////////////////////////////////////////////////////////////////////
+	//general
+	//////////////////////////////////////////////////////////////////////////
 	//NN status
 	int _layers;
 
 	vector<NeuronsLayer> _neurons_layers;//include input layer, output layer and middle layer
-	vector<WeightMatrix> _pattern_matrix;//the weight matrix between the adjacent layers. the row is the lower layer and the col is the upper layer.
+	vector<WeightMatrix> _pattern_matrix;//the weight matrix between the adjacent layers. the rows is the number of neurons of the lower layer and the cols is the upper layer.
 	vector<WeightMatrix> _prediction_matrix;//the weight matrix among the neurons in the layer.
 	vector<WeightMatrix> _inhibition_matrix;
 
@@ -42,7 +45,16 @@ private:
 	int _inhibition_field;// the maximum radius of surrounding neurons in the layer, where the neurons will be inhibited from activing by the neuron.
 	int _neuron_active_hold_duration;//the steps of neuron keeping activation. by default: 1.
 
+	//train data
+	vector<float>	_train_data;
+	int				_train_data_label;
+	int				_train_data_width;
+	int				_train_data_height;
+
+
+	//////////////////////////////////////////////////////////////////////////
 	//minst
+	//////////////////////////////////////////////////////////////////////////
 	ifstream _minst_train_image;
 	ifstream _minst_train_label;
 	ifstream _minst_test_image;
@@ -66,9 +78,11 @@ private:
 	char _minst_test_image_buf_label;
 
 public:
+	//////////////////////////////////////////////////////////////////////////
+	//general
+	//////////////////////////////////////////////////////////////////////////
 	MemoryPredictNN(void);
 	~MemoryPredictNN(void);
-
 	//mpnn
 	bool CreateInputLayer();
 	bool CreateLayer();
@@ -76,8 +90,14 @@ public:
 	bool TrainLayer(int layer);
 
 	float active_sigmoid(int layer, int nid);
+	float active_relu(int layer, int nid);
+	float active_tanh(int layer, int nid);
 
+	float active_input_neuron(int r, int c);
+
+	//////////////////////////////////////////////////////////////////////////
 	//minst
+	//////////////////////////////////////////////////////////////////////////
 	bool OpenMINSTTrainImage(string image, string label);
 	bool ReadNextMINSTTrainImage();
 	bool LearnMINSTImage();
