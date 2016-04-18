@@ -136,15 +136,64 @@ bool MemoryPredictNN::CreateLayer()
 	else
 	{
 		_neurons_layers.push_back(layer);
+
+		//initalize pattern matrix between lower layer and the current.
+		WeightMatrix mat_pattern;
+		mat_pattern._rows = lower_layer._width*lower_layer._height;
+		mat_pattern._cols = layer._width*layer._height;
+		mat_pattern._weights.resize(mat_pattern._rows * mat_pattern._cols);
+		vector<float>::iterator it = mat_pattern._weights.begin();
+		while(it != mat_pattern._weights.end())
+		{
+			*it = 0.0f;
+		}
+		_pattern_matrix.push_back(mat_pattern);
+		//intalize predict matrix of the layer.
+		WeightMatrix mat_predict;
+		mat_predict._rows = layer._width*layer._height;
+		mat_predict._cols = layer._width*layer._height;
+		mat_predict._weights.resize(mat_predict._rows * mat_predict._cols);
+		vector<float>::iterator it = mat_predict._weights.begin();
+		while(it != mat_pattern._weights.end())
+		{
+			*it = 0.0f;
+		}
+		_prediction_matrix.push_back(mat_predict);
+		//initalize inhibition matrix of the layer.
+		WeightMatrix mat_inhibition;
+		mat_inhibition._rows = layer._width*layer._height;
+		mat_inhibition._cols = layer._width*layer._height;
+		mat_inhibition._weights.resize(mat_inhibition._rows * mat_inhibition._cols);
+		vector<float>::iterator it = mat_inhibition._weights.begin();
+		while(it != mat_inhibition._weights.end())
+		{
+			*it = 0.0f;
+		}
+		_inhibition_matrix.push_back(mat_predict);
+
+
 		return true;
 	}
 }
 
 bool MemoryPredictNN::TrainInputLayer()
 {
-
+	NeuronsLayer& input_layer = _neurons_layers.at(0);
+	for(int r = 0; r<input_layer._width; r++)
+	{
+		for(int c=0; c<input_layer._height; c++)
+		{
+			input_layer._layer_output_vector.at(r*input_layer._width+c)=active_input_neuron(r,c);
+		}
+	}
 }
 bool MemoryPredictNN::TrainLayer(int layer)
 {
 
+}
+
+float MemoryPredictNN::active_input_neuron(int r, int c)
+{
+	
+	return 0.0f;
 }
